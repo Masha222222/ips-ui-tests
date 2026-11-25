@@ -9,6 +9,7 @@ class DashboardPage:
         self.apply_button = page.get_by_role("button", name="Применить")
         self.glucose_input = page.get_by_placeholder("glucose_value")
         self.send_button = page.get_by_role("button", name="Отправить")
+        self.alerts_link = page.get_by_role("link", name="Тревоги")
 
     @allure.step("Открыть дашборд")
     def open(self):
@@ -23,6 +24,12 @@ class DashboardPage:
     def send_glucose(self, value):
         self.glucose_input.fill(value)
         self.send_button.click()
+
+    @allure.step("Прочитать счётчик тревог")
+    def read_alert_count(self):
+        text = self.alerts_link.inner_text().strip()
+        last_part = text.split()[-1]
+        return int(last_part) if last_part.isdecimal() else 0
 
     def expect_glucose(self, value, level):
         expect(
