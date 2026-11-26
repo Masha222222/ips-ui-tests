@@ -3,7 +3,7 @@ import re
 import allure
 import pytest
 from playwright.sync_api import expect
-
+NORMAL_GLUCOSE_VALUE = "6.0"
 
 @allure.title("После отправки глюкозы {value} счётчик тревог растёт на 1")
 @pytest.mark.parametrize(
@@ -34,11 +34,11 @@ def test_normal_glucose_does_not_add_alert(dashboard, test_pump_id):
     dashboard.select_pump(test_pump_id)
     before = dashboard.read_alert_count()
 
-    dashboard.send_glucose("6.0")
-    dashboard.expect_glucose("6.0", "Норма")
+    dashboard.send_glucose(NORMAL_GLUCOSE_VALUE)
+    dashboard.expect_glucose(NORMAL_GLUCOSE_VALUE, "Норма")
 
     after = dashboard.read_alert_count()
     assert after == before, (
-        f"При глюкозе 6.0 счётчик тревог должен остаться {before}, "
-        f"получено {after}"
+        f"При глюкозе {NORMAL_GLUCOSE_VALUE} счётчик тревог должен "
+        f"остаться {before}, получено {after}"
     )
